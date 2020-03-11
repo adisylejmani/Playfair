@@ -165,7 +165,7 @@ public class playfair {
         for (int i = 0; i < 5; i++) {
             boolean symbolPlaced = false;
             int j = 0;
-            while (!symbolPlaced || j < 5) {
+            while (!symbolPlaced || (j < 5)) {
                 if (IndexKey < key.length()) {
                     //until the key is placed in the table
                     char symbolK = key.charAt(IndexKey);
