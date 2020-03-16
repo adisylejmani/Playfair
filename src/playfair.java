@@ -1,3 +1,4 @@
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -8,19 +9,24 @@ public class playfair {
     final static char replacedLetter = 'J';
 
     public static void main(String[] args) {
-        String key, plaintext;
-        Scanner input = new Scanner(System.in);
-        System.out.print("Enter the key: ");
-        key = input.nextLine();
-        System.out.print("Enter the plaintext: ");
-        plaintext = input.nextLine();
-        char[][] table = getTable(key);
+        char[][] table = getTable(args[3]);
+        if (args.length < 5) {
+            System.out.println("Nuk keni mjaftueshem argumente!");
+            System.exit(-1);
+        }
+        String function = args[2].toLowerCase();
+        if (function.contentEquals("encrypt")) {
+            System.out.println(Encrypt(args[4], table));
+        } else if (function.contentEquals("decrypt")) {
+            System.out.println(Decrypt(args[4], table));
+
+        } else {
+            System.out.println("Funksion jovalid!");
+            System.exit(-2);
+        }
         PrintTable(table);
-        String ciphertext = Encrypt(plaintext, table);
-        System.out.println("Ciphertext: " + ciphertext);
-        String deciphertext=Decrypt(ciphertext,table);
-        System.out.println("Decrypted text: "+deciphertext);
     }
+
 
     public static String Encrypt(String plaintext, char[][] table) {
         String result = "";
@@ -28,6 +34,7 @@ public class playfair {
         plaintext = removeSpaces(plaintext);
         if (plaintext.length() % 2 != 0)
             plaintext = plaintext + oddLetter;
+
         int m = (int) Math.round(plaintext.length() / 2.0);
         int p = 0;
         char pairs[][] = new char[m][2];
@@ -114,6 +121,7 @@ public class playfair {
                 result += table[pu.row2][pu.column1];
             }
         }
+
         if (result.charAt(result.length() - 1) == oddLetter)
             result = result.substring(0, result.length() - 1);
         return result;
@@ -127,7 +135,8 @@ public class playfair {
                 if (table[i][j] == ch1) {
                     i1 = i;
                     j1 = j;
-                } else if (table[i][j] == ch2) {
+                }
+                if (table[i][j] == ch2) {
                     i2 = i;
                     j2 = j;
                 }
@@ -158,7 +167,7 @@ public class playfair {
     public static char[][] getTable(String key) {
         HashMap hm = new HashMap();
         char result[][] = new char[5][5];
-        key=key.trim();
+        key = key.trim();
         key = key.toUpperCase();
         int IndexKey = 0;
         char symbolA = 65;//A in ascii code is 65
@@ -169,17 +178,17 @@ public class playfair {
                 if (IndexKey < key.length()) {
                     //until the key is placed in the table
                     char symbolK = key.charAt(IndexKey);
-                    if (symbolK == replacedLetter) symbolK++;
-                    if (!hm.containsKey(symbolK)) {
-                        result[i][j] = symbolK;
-                        int value[] = {i, j};
-                        hm.put(symbolK, value);
-                        symbolPlaced = true;
-                        j++;
+                    if (symbolK != replacedLetter) {
+                        if (!hm.containsKey(symbolK)) {
+                            result[i][j] = symbolK;
+                            int value[] = {i, j};
+                            hm.put(symbolK, value);
+                            symbolPlaced = true;
+                            j++;
+                        }
                     }
                     IndexKey++;
-                }
-                if (IndexKey >= key.length()) {
+                } else if (IndexKey >= key.length()) {
                     //place the remaining letter of the alphabet except J
                     if (symbolA == replacedLetter) symbolA++;
                     if (!hm.containsKey(symbolA)) {
