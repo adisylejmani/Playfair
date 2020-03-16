@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Playfair:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Playfair_jar</output-path>
+    <root id="archive" name="Playfair.jar">
+      <element id="module-output" name="Playfair" />
+    </root>
+  </artifact>
+</component>
